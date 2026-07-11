@@ -204,7 +204,7 @@ app.post("/api/demo/speak", async (req, res) => {
     if (settle) res.set("X-PAYMENT-RESPONSE", settle);
     const audio = Buffer.from(await r.arrayBuffer());
     res.set("Content-Type", r.headers.get("content-type") || "audio/mpeg");
-    res.set("Content-Disposition", 'attachment; filename="tab402.mp3"');
+    res.set("Content-Disposition", 'attachment; filename="gnome.mp3"');
     res.send(audio);
     console.log(`🎁 demo TTS fulfilled (${audio.length} bytes)`);
   } catch (err) {
@@ -214,7 +214,7 @@ app.post("/api/demo/speak", async (req, res) => {
   }
 });
 
-app.get("/health", (_req, res) => res.json({ status: "ok", service: "tab402/proxy", network: cfg.network }));
+app.get("/health", (_req, res) => res.json({ status: "ok", service: "gnome/proxy", network: cfg.network }));
 
 await resolveToken();
 setRuntime({

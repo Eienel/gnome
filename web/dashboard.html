@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tab402 — Developer dashboard</title>
+  <title>Gnome — Developer dashboard</title>
   <meta name="description" content="Provision an agent wallet, fund it, and watch real on-chain x402 settlements on Robinhood Chain." />
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <nav class="nav">
     <div class="wrap">
-      <a class="brand" href="/"><span class="dot"></span> Tab402</a>
+      <a class="brand" href="/"><span class="dot"></span> Gnome</a>
       <div class="nav-links">
         <a href="/#how">How it works</a>
         <a href="/demo">Demo</a>
@@ -93,7 +93,7 @@
     </section>
   </section>
 
-  <footer><div class="wrap"><div class="brand"><span class="dot"></span> Tab402</div><div class="muted">Every row is a real x402 settlement · click through to the explorer</div></div></footer>
+  <footer><div class="wrap"><div class="brand"><span class="dot"></span> Gnome</div><div class="muted">Every row is a real x402 settlement · click through to the explorer</div></div></footer>
 
   <script src="/app.js"></script>
   <script>
@@ -101,19 +101,19 @@
     let CFG, DEC = 6, SYM = "token";
     let lastKey = null;
 
-    const money = (v) => T402.fmtUnits(v, DEC) + " " + SYM;
+    const money = (v) => GNOME.fmtUnits(v, DEC) + " " + SYM;
     const rowHtml = (s) => `
       <div class="row">
-        <span class="addr">${T402.short(s.payer)}</span>
+        <span class="addr">${GNOME.short(s.payer)}</span>
         <span class="amt">${money(s.amount)}</span>
-        <span class="muted" style="font-size:12px">${T402.ago(s.ts)}</span>
-        <a class="tx" href="${s.explorerUrl || "#"}" target="_blank" rel="noopener">${T402.short(s.transaction)} ↗</a>
+        <span class="muted" style="font-size:12px">${GNOME.ago(s.ts)}</span>
+        <a class="tx" href="${s.explorerUrl || "#"}" target="_blank" rel="noopener">${GNOME.short(s.transaction)} ↗</a>
       </div>`;
 
     async function loadStats() {
       const st = await fetch("/api/stats").then(r => r.json());
       $("s-calls").textContent = st.totalCalls ?? 0;
-      $("s-vol").textContent = T402.fmtUnits(st.volumeBaseUnits || "0", DEC);
+      $("s-vol").textContent = GNOME.fmtUnits(st.volumeBaseUnits || "0", DEC);
       $("s-sym").textContent = SYM;
     }
     async function loadFeed() {
@@ -124,7 +124,7 @@
     }
 
     (async () => {
-      CFG = await T402.getConfig();
+      CFG = await GNOME.getConfig();
       DEC = CFG.token.decimals; SYM = CFG.token.symbol;
       $("chainName").textContent = CFG.chainName;
       $("tokenSym").textContent = `${CFG.token.symbol} · ${CFG.token.name}`;
@@ -159,7 +159,7 @@
           body: JSON.stringify({ address: lastKey.address }),
         }).then(r => r.json());
         $("fundMsg").innerHTML = r.ok
-          ? `Funded ✓ <a class="green tx" target="_blank" href="${r.explorerUrl}">${T402.short(r.transaction)} ↗</a>`
+          ? `Funded ✓ <a class="green tx" target="_blank" href="${r.explorerUrl}">${GNOME.short(r.transaction)} ↗</a>`
           : `<span style="color:var(--red)">${r.error}</span>`;
       } catch (e) { $("fundMsg").innerHTML = '<span style="color:var(--red)">Fund failed</span>'; }
     });
@@ -174,7 +174,7 @@
     async function doLookup(addr) {
       const u = await fetch(`/api/usage/${addr}`).then(r => r.json());
       $("u-count").textContent = u.count;
-      $("u-spent").textContent = T402.fmtUnits(u.spentBaseUnits || "0", DEC);
+      $("u-spent").textContent = GNOME.fmtUnits(u.spentBaseUnits || "0", DEC);
       $("usageFeed").innerHTML = u.settlements.length ? u.settlements.map(rowHtml).join("") : '<div class="muted">No calls for this address.</div>';
       $("usageOut").classList.remove("hidden");
     }

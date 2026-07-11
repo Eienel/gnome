@@ -135,7 +135,7 @@ router.get("/feed", (_req, res) => {
   res.json({ count: s.length, settlements: s.slice(0, 25).map(fmt) });
 });
 
-router.get("/health", (_req, res) => res.json({ status: "ok", service: "tab402-dashboard-api" }));
+router.get("/health", (_req, res) => res.json({ status: "ok", service: "gnome-dashboard-api" }));
 
 function fmt(s: Settlement) {
   return {

@@ -1,5 +1,5 @@
-// Shared front-end helpers for Tab402 pages.
-window.T402 = (() => {
+// Shared front-end helpers for Gnome pages.
+window.GNOME = (() => {
   const short = (a) => (a && a.length > 14 ? `${a.slice(0, 8)}…${a.slice(-6)}` : a || "");
   const ago = (iso) => {
     const s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);

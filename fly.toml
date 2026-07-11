@@ -1,4 +1,4 @@
-app = "tab402"
+app = "gnome"
 primary_region = "iad"
 
 [build]
@@ -8,6 +8,20 @@ primary_region = "iad"
   PROXY_PORT = "4021"
   PORT = "4022"
   FACILITATOR_URL = "http://localhost:4022"
+  # Base Sepolia testnet, real USDC settlement. Swap to Robinhood mainnet at go-live.
+  SETTLEMENT_MODE = "onchain"
+  CAIP2_CHAIN_ID = "eip155:84532"
+  NETWORKS = "eip155:84532"
+  RPCURL_BASE_SEPOLIA = "https://sepolia.base.org"
+  ASSET_ADDRESS = "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+  PRICE = "$0.001"
+  DEEPGRAM_TTS_MODEL = "aura-2-thalia-en"
+  LEDGER_PATH = "/data/ledger.jsonl"
+
+# Persist the settlement ledger across deploys/restarts.
+[mounts]
+  source = "gnome_data"
+  destination = "/data"
 
 [http_service]
   internal_port = 4021

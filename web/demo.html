@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tab402 — Live demo</title>
+  <title>Gnome — Live demo</title>
   <meta name="description" content="Type a sentence, watch the house wallet pay for a Deepgram text-to-speech call on Robinhood Chain, and play the result." />
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <nav class="nav">
     <div class="wrap">
-      <a class="brand" href="/"><span class="dot"></span> Tab402</a>
+      <a class="brand" href="/"><span class="dot"></span> Gnome</a>
       <div class="nav-links">
         <a href="/#how">How it works</a>
         <a href="/dashboard">Dashboard</a>
@@ -30,7 +30,7 @@
       <!-- Left: input -->
       <div class="card">
         <label class="lbl" for="text">What should the agent say?</label>
-        <textarea id="text" class="field" maxlength="300" placeholder="Hello. I am an autonomous agent, and I just paid for this sentence on Robinhood Chain.">Hello. I am an autonomous agent, and I just paid for this sentence on Robinhood Chain.</textarea>
+        <textarea id="text" class="field" maxlength="300" placeholder="Hello. I am an autonomous agent, and I just paid for this sentence on-chain.">Hello. I am an autonomous agent, and I just paid for this sentence on-chain.</textarea>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
           <span class="muted" style="font-size:12.5px"><span id="count">0</span>/300 · costs <span id="price" class="green mono">—</span> per call</span>
           <span id="mode" class="badge-live mono">on-chain</span>
@@ -57,14 +57,14 @@
           <div class="row"><span class="muted">Transaction</span><a id="txLink" class="tx" href="#" target="_blank" rel="noopener">—</a></div>
           <div class="row" style="margin-top:8px"><span class="muted">Payer</span><span id="payer" class="addr">—</span></div>
           <div class="row" style="margin-top:8px"><span class="muted">Amount</span><span id="amt" class="amt">—</span></div>
-          <a id="download" class="btn btn-ghost" style="width:100%;margin-top:16px" download="tab402.mp3">Download MP3</a>
+          <a id="download" class="btn btn-ghost" style="width:100%;margin-top:16px" download="gnome.mp3">Download MP3</a>
         </div>
         <div id="error" class="hidden" style="color:var(--red);font-size:14px"></div>
       </div>
     </div>
   </section>
 
-  <footer><div class="wrap"><div class="brand"><span class="dot"></span> Tab402</div><div class="muted">Deepgram TTS · x402 · settled on <span id="footChain">Robinhood Chain</span></div></div></footer>
+  <footer><div class="wrap"><div class="brand"><span class="dot"></span> Gnome</div><div class="muted">Deepgram TTS · x402 · settled on <span id="footChain">Robinhood Chain</span></div></div></footer>
 
   <script src="/app.js"></script>
   <script>
@@ -77,9 +77,9 @@
     $("count").textContent = $("text").value.length;
 
     (async () => {
-      CFG = await T402.getConfig();
+      CFG = await GNOME.getConfig();
       const dec = CFG.token.decimals;
-      const p = T402.fmtUnits(CFG.priceBaseUnits, dec) + " " + CFG.token.symbol;
+      const p = GNOME.fmtUnits(CFG.priceBaseUnits, dec) + " " + CFG.token.symbol;
       $("price").textContent = p;
       $("chainName").textContent = CFG.chainName;
       $("chainName2").textContent = CFG.chainName;
@@ -115,10 +115,10 @@
         let receipt = {};
         try { receipt = JSON.parse(atob(receiptHdr)); } catch {}
         const dec = CFG.token.decimals;
-        $("txLink").textContent = receipt.transaction ? T402.short(receipt.transaction) : "—";
+        $("txLink").textContent = receipt.transaction ? GNOME.short(receipt.transaction) : "—";
         $("txLink").href = receipt.transaction && CFG.explorer ? `${CFG.explorer}/tx/${receipt.transaction}` : "#";
-        $("payer").textContent = receipt.payer ? T402.short(receipt.payer) : "—";
-        $("amt").textContent = T402.fmtUnits(CFG.priceBaseUnits, dec) + " " + CFG.token.symbol;
+        $("payer").textContent = receipt.payer ? GNOME.short(receipt.payer) : "—";
+        $("amt").textContent = GNOME.fmtUnits(CFG.priceBaseUnits, dec) + " " + CFG.token.symbol;
         $("result").classList.remove("hidden");
         $("audio").play().catch(() => {});
       } catch (e) {

@@ -1,16 +1,16 @@
-# Tab402
+# Gnome
 
 Pay-per-request API payments for autonomous agents, settled on **Robinhood Chain**.
 
-Tab402 is an EVM-native payment rail that lets any agent or person pay for a premium API one call at a time, on-chain, from a balance they cannot overspend. It uses the [x402](https://x402.org) standard (HTTP 402 Payment Required) and settles every call as an **EIP-3009 `transferWithAuthorization`** ERC-20 transfer on Robinhood Chain.
+Gnome is an EVM-native payment rail that lets any agent or person pay for a premium API one call at a time, on-chain, from a balance they cannot overspend. It uses the [x402](https://x402.org) standard (HTTP 402 Payment Required) and settles every call as an **EIP-3009 `transferWithAuthorization`** ERC-20 transfer on Robinhood Chain.
 
 ## What changed from the Casper version
 
-This is a full EVM port of the original Casper implementation. Instead of CEP-18 token transfers signed with Casper keys, Tab402 now speaks the **EVM flavor of x402**: the client signs an EIP-712 `TransferWithAuthorization` (EIP-3009) with an ordinary EVM key, and the facilitator submits it on-chain to any ERC-20 stablecoin (e.g. USDC) on **Robinhood Chain** — Robinhood's EVM Layer 2. The rail, the paywall, the facilitator, the dashboard, and the reference agent are all EVM-native. Deepgram text-to-speech remains the reference upstream.
+This is a full EVM port of the original Casper implementation. Instead of CEP-18 token transfers signed with Casper keys, Gnome now speaks the **EVM flavor of x402**: the client signs an EIP-712 `TransferWithAuthorization` (EIP-3009) with an ordinary EVM key, and the facilitator submits it on-chain to any ERC-20 stablecoin (e.g. USDC) on **Robinhood Chain** — Robinhood's EVM Layer 2. The rail, the paywall, the facilitator, the dashboard, and the reference agent are all EVM-native. Deepgram text-to-speech remains the reference upstream.
 
 ## The problem
 
-Autonomous agents can hold crypto, but the world's APIs still run on credit cards, subscriptions, and manually issued keys. An agent cannot sign up for a card, and nothing stops it from running up an unbounded bill. Tab402 solves both: metered, pay-as-you-go access with a hard spending cap enforced by the payment itself. When the balance runs out, calls stop. There is no overdraft.
+Autonomous agents can hold crypto, but the world's APIs still run on credit cards, subscriptions, and manually issued keys. An agent cannot sign up for a card, and nothing stops it from running up an unbounded bill. Gnome solves both: metered, pay-as-you-go access with a hard spending cap enforced by the payment itself. When the balance runs out, calls stop. There is no overdraft.
 
 ## How a paid call works
 
@@ -41,8 +41,10 @@ Every call is a final on-chain settlement — an ERC-20 transfer that either lan
 
 ## Settlement modes
 
-- **`simulate`** — the full x402 round-trip (402 → sign → verify → settle → serve) with a deterministic pseudo tx hash. Perfect for demoing before mainnet access or token funding is provisioned. This is the default in `.env.example`.
-- **`onchain`** — submits real `transferWithAuthorization` transactions to Robinhood Chain against a live ERC-20 (e.g. USDC). Requires a funded facilitator key and a token that implements EIP-3009.
+- **`onchain`** — submits real `transferWithAuthorization` transactions against a live ERC-20 (e.g. USDC). This is the default: the shipped config settles on **Base Sepolia** against Circle's testnet USDC (`0x036CbD…dCF7e`). Requires a facilitator key funded with gas and an agent/treasury key funded with USDC. At go-live, swap the network block for Robinhood Chain mainnet (see `.env.example`).
+- **`simulate`** — the full x402 round-trip (402 → sign → verify → settle → serve) with a deterministic pseudo tx hash and no chain access. Handy for pure UI/demo runs.
+
+Faucets for the Base Sepolia testnet: [ETH (gas)](https://portal.cdp.coinbase.com/products/faucet) · [USDC](https://faucet.circle.com).
 
 ## Run locally
 
@@ -69,12 +71,12 @@ Open http://localhost:4021 for the landing page, `/demo` for the no-wallet demo,
 ## Use it in your own agent
 
 ```ts
-import { createPayer, wrapFetchWithPayment } from "tab402/client"; // src/lib/client.ts
+import { createPayer, wrapFetchWithPayment } from "gnome/client"; // src/lib/client.ts
 
 const payer = createPayer(process.env.AGENT_PRIVATE_KEY as `0x${string}`);
 const pay = wrapFetchWithPayment(fetch, payer);
 
-const res = await pay("https://tab402.app/v1/speak", {
+const res = await pay("https://gnome.app/v1/speak", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ text: "Hello, paid on Robinhood Chain." }),
@@ -103,15 +105,23 @@ See `.env.example` for the full list.
 
 ## Deploy
 
-Single container running the facilitator plus the proxy — see `Dockerfile` and `fly.toml`.
+Deployed on **Fly.io** as a single container running the facilitator plus the proxy — see `Dockerfile` and `fly.toml`. The non-secret network config (Base Sepolia, USDC, price) is baked into `fly.toml [env]`; only secrets need setting. A persistent volume keeps the settlement ledger across deploys.
 
 ```bash
+fly launch --no-deploy          # first time: creates the app + volume
+fly volumes create gnome_data --size 1   # if not auto-created
+fly secrets set \
+  FACILITATOR_PRIVATE_KEY=0x… \
+  TREASURY_PRIVATE_KEY=0x… \
+  DEMO_AGENT_PRIVATE_KEY=0x… \
+  PAYEE_ADDRESS=0x… \
+  DEEPGRAM_API_KEY=…
 fly deploy
-fly secrets set FACILITATOR_PRIVATE_KEY=0x… TREASURY_PRIVATE_KEY=0x… \
-  DEEPGRAM_API_KEY=… PAYEE_ADDRESS=0x… ASSET_ADDRESS=0x… SETTLEMENT_MODE=onchain
 ```
 
-`vercel.json` deploys the static marketing/dashboard pages (`web/`) as a preview; the full rail (facilitator + proxy) runs best as the Fly container.
+**Going live on Robinhood Chain mainnet:** update the network vars in `fly.toml [env]` (`CAIP2_CHAIN_ID`, `NETWORKS`, `ROBINHOOD_CHAIN_ID`, `RPCURL_ROBINHOOD`, `ROBINHOOD_EXPLORER`, `ASSET_ADDRESS`) to the mainnet values, then `fly deploy`. No code changes required.
+
+`vercel.json` deploys the static marketing/dashboard pages (`web/`) as a preview; the full rail runs on Fly.
 
 ## Why this is bigger than the demo
 

@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tab402 — Pay-per-call APIs for agents, settled on Robinhood Chain</title>
+  <title>Gnome — Pay-per-call APIs for agents, settled on Robinhood Chain</title>
   <meta name="description" content="An x402 payment rail that lets any agent pay for a premium API one call at a time, on-chain, from a balance it cannot overspend. EVM-native, settled on Robinhood Chain." />
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <nav class="nav">
     <div class="wrap">
-      <a class="brand" href="/"><span class="dot"></span> Tab402</a>
+      <a class="brand" href="/"><span class="dot"></span> Gnome</a>
       <div class="nav-links">
         <a href="#how">How it works</a>
         <a href="#build">Build</a>
@@ -44,7 +44,7 @@
   <section class="wrap">
     <span class="eyebrow">The problem</span>
     <h2 class="title">Agents hold crypto. APIs still want credit cards.</h2>
-    <p class="lead">An autonomous agent can't sign up for a card, and nothing stops it from running up an unbounded bill. Tab402 fixes both: pay-as-you-go access with a hard cap enforced by the payment itself. When the balance runs out, the calls stop. There is no overdraft.</p>
+    <p class="lead">An autonomous agent can't sign up for a card, and nothing stops it from running up an unbounded bill. Gnome fixes both: pay-as-you-go access with a hard cap enforced by the payment itself. When the balance runs out, the calls stop. There is no overdraft.</p>
   </section>
 
   <!-- How it works -->
@@ -79,13 +79,13 @@
     <div class="code">
       <div class="bar"><i style="background:#ff5f56"></i><i style="background:#ffbd2e"></i><i style="background:#27c93f"></i><span class="mono muted" style="margin-left:8px;font-size:12px">agent.ts</span></div>
 <pre><span class="c">// pay-per-call, capped by the agent's on-chain balance</span>
-<span class="k">import</span> { createPayer, wrapFetchWithPayment } <span class="k">from</span> <span class="s">"tab402/client"</span>;
+<span class="k">import</span> { createPayer, wrapFetchWithPayment } <span class="k">from</span> <span class="s">"gnome/client"</span>;
 
 <span class="k">const</span> payer = createPayer(process.env.<span class="k">AGENT_PRIVATE_KEY</span>);
 <span class="k">const</span> pay   = wrapFetchWithPayment(fetch, payer);
 
 <span class="c">// the 402 is signed &amp; settled on Robinhood Chain automatically</span>
-<span class="k">const</span> res = <span class="k">await</span> pay(<span class="s">"https://tab402.app/v1/speak"</span>, {
+<span class="k">const</span> res = <span class="k">await</span> pay(<span class="s">"https://gnome.app/v1/speak"</span>, {
   method: <span class="s">"POST"</span>,
   headers: { <span class="s">"Content-Type"</span>: <span class="s">"application/json"</span> },
   body: JSON.stringify({ text: <span class="s">"Hello, paid on-chain."</span> }),
@@ -100,7 +100,7 @@
 
   <footer>
     <div class="wrap">
-      <div class="brand"><span class="dot"></span> Tab402</div>
+      <div class="brand"><span class="dot"></span> Gnome</div>
       <div class="muted">EVM-native x402 payment rail · settled on <span id="footChain">Robinhood Chain</span> · Deepgram TTS reference integration</div>
     </div>
   </footer>
