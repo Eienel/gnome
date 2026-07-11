@@ -107,9 +107,9 @@ See `.env.example` for the full list.
 
 ### Render (easiest, no CLI)
 
-A `render.yaml` blueprint is included. In the [Render dashboard](https://dashboard.render.com/): **New > Blueprint**, connect this repo, and Render reads the blueprint. Fill the five secrets it prompts for (`FACILITATOR_PRIVATE_KEY`, `TREASURY_PRIVATE_KEY`, `DEMO_AGENT_PRIVATE_KEY`, `PAYEE_ADDRESS`, `DEEPGRAM_API_KEY`), then **Apply**. Pushes auto-deploy after that.
+A `render.yaml` blueprint is included. In the [Render dashboard](https://dashboard.render.com/): **New > Blueprint**, connect this repo, then **Apply**. It comes up green with **no secrets and no funding**, because it defaults to `SETTLEMENT_MODE=simulate`: the full 402 flow (sign, verify, settle, serve) runs and settlements show a deterministic simulated hash. Pushes auto-deploy after that.
 
-The non-secret network config (Base Sepolia, USDC, price) is baked into `render.yaml`. Fund the keys (Base Sepolia ETH for the facilitator's gas, USDC for the treasury/demo wallet) for real settlement, or set `SETTLEMENT_MODE=simulate` to run the full flow with no funding.
+To go live with real on-chain settlement, in the Render dashboard set `SETTLEMENT_MODE=onchain`, fill the secrets (`FACILITATOR_PRIVATE_KEY`, `TREASURY_PRIVATE_KEY`, `PAYEE_ADDRESS`, `DEEPGRAM_API_KEY`), and fund the keys (Base Sepolia ETH for the facilitator's gas, USDC for the treasury/demo wallet).
 
 Free-plan notes: the service spins down when idle (cold start on the next visit) and has no persistent disk, so the ledger/live-feed resets on restart. Use a paid instance with a disk for persistence and always-on.
 

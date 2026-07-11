@@ -1,8 +1,17 @@
 # Render blueprint. In the Render dashboard: New > Blueprint, connect this repo,
-# it reads this file. Fill the `sync: false` secrets in the UI, then Deploy.
+# it reads this file, then Apply. It comes up GREEN with zero funding because it
+# defaults to SETTLEMENT_MODE=simulate (the full 402 flow runs, settlements show
+# a deterministic simulated hash).
+#
+# To go live with real on-chain settlement, in the Render dashboard:
+#   1. set SETTLEMENT_MODE=onchain
+#   2. fill FACILITATOR_PRIVATE_KEY, TREASURY_PRIVATE_KEY, PAYEE_ADDRESS,
+#      DEEPGRAM_API_KEY (and optionally DEMO_AGENT_PRIVATE_KEY)
+#   3. fund the facilitator key with Base Sepolia ETH and the treasury with USDC
+#
 # Free plan: spins down when idle and has no persistent disk, so the settlement
-# ledger (live feed) resets on restart. Bump `plan` to `starter` and add a disk
-# for persistence + always-on.
+# ledger (live feed) resets on restart. Bump `plan` to `starter` + add a disk
+# for persistence and always-on.
 services:
   - type: web
     name: gnome
@@ -12,9 +21,14 @@ services:
     healthCheckPath: /health
     autoDeploy: true
     envVars:
-      # --- network: real Base Sepolia USDC settlement (non-secret) ---
+      # --- runs green immediately (no funding, no secrets required) ---
       - key: SETTLEMENT_MODE
-        value: onchain
+        value: simulate
+      # Throwaway demo signer so the house-funded demo works out of the box in
+      # simulate mode. NOT a funded key; replace for real on-chain settlement.
+      - key: DEMO_AGENT_PRIVATE_KEY
+        value: "0x9d97472dee51a91223c149179260d804823da4b19f703b02ccdc2ec46803289e"
+      # --- network config (Base Sepolia USDC, used once SETTLEMENT_MODE=onchain) ---
       - key: CAIP2_CHAIN_ID
         value: eip155:84532
       - key: NETWORKS
@@ -33,12 +47,10 @@ services:
         value: http://localhost:4022
       - key: LEDGER_PATH
         value: /tmp/ledger.jsonl
-      # --- secrets: set these in the Render dashboard (never committed) ---
+      # --- secrets for on-chain mode: set in the dashboard when going live ---
       - key: FACILITATOR_PRIVATE_KEY
         sync: false
       - key: TREASURY_PRIVATE_KEY
-        sync: false
-      - key: DEMO_AGENT_PRIVATE_KEY
         sync: false
       - key: PAYEE_ADDRESS
         sync: false
