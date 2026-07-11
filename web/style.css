@@ -30,8 +30,11 @@
   --green-2: #00c853;     /* deeper fill / hover */
   --green-ink: #00733c;   /* green text on light (AA for body) */
   --green-hi: #00b050;    /* green accent for LARGE text only (3:1) */
-  --shadow: 5px 5px 0 var(--ink);
-  --shadow-sm: 3px 3px 0 var(--ink);
+  --shadow: 5px 6px 0 rgba(13, 15, 14, 0.13);
+  --shadow-sm: 3px 4px 0 rgba(13, 15, 14, 0.12);
+  --radius: 14px;
+  --radius-sm: 9px;
+  --tint: #eef6ee;        /* faint green panel tint */
   --pixel: "Silkscreen", "Courier New", ui-monospace, monospace;
   --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -266,3 +269,59 @@ img.px { image-rendering: pixelated; image-rendering: crisp-edges; display: bloc
   background: var(--paper); box-shadow: var(--shadow-sm); font-family: var(--pixel); font-size: 12px; transition: transform .12s, background .15s; }
 .social a:hover { background: var(--green); transform: translate(-1px,-1px); }
 @media (max-width: 720px) { .foot-fire, .foot-gnome { height: 72px; } .foot-row { flex-wrap: wrap; justify-content: center; } .bubble { display: none; } }
+
+/* ============================================================================
+   Mock-match polish: rounded corner system + card detail (icons, subpanels,
+   green check, tinted audio, sparkles, leaf, tree/flower scenery).
+   ============================================================================ */
+.pcard, .code { border-radius: var(--radius); }
+.btn, .field, .chip, .badge, .row, .st .b, .social a, .bubble, .code .bar { border-radius: var(--radius-sm); }
+.step .num { border-radius: 8px; }
+.brand .mark { border-radius: 4px; }
+textarea.field { border-radius: var(--radius-sm); }
+
+/* per-row info panel inside the settled card */
+.rowline { display: flex; align-items: center; gap: 12px; padding: 13px 15px; background: var(--tint);
+  border: 2px solid var(--ink); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); }
+.rowline + .rowline { margin-top: 10px; }
+.rowline .iconbox { width: 30px; height: 30px; flex: none; display: grid; place-items: center;
+  background: var(--paper); border: 2px solid var(--ink); border-radius: 7px; }
+.rowline .lab { font-size: 14px; }
+.rowline .val { margin-left: auto; font-family: var(--mono); font-size: 13px; color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px; }
+.rowline .val.green { color: var(--green-ink); font-family: var(--pixel); font-size: 12px; }
+
+/* small monochrome UI icons */
+.ic { width: 16px; height: 16px; color: var(--ink); }
+.ic-g { color: var(--green-ink); }
+
+/* green check badge next to a heading */
+.checkline { display: flex; align-items: center; gap: 10px; }
+.check { width: 24px; height: 24px; background: var(--green); border: 2px solid var(--ink); border-radius: 7px;
+  display: grid; place-items: center; box-shadow: var(--shadow-sm); }
+.check .ic { color: var(--ink); width: 14px; height: 14px; }
+
+/* tinted rounded audio player */
+.audio-wrap { background: var(--tint); border: 2px solid var(--ink); border-radius: var(--radius-sm);
+  padding: 8px; box-shadow: var(--shadow-sm); }
+.audio-wrap audio { width: 100%; display: block; }
+
+/* sparkle accents on the primary demo button */
+.btn.sparkly { position: relative; overflow: visible; }
+.btn.sparkly::after { content: "✦"; position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  color: rgba(13,15,14,.55); font-size: 13px; text-shadow: 8px -6px 0 rgba(13,15,14,.35), -3px 7px 0 rgba(13,15,14,.28); }
+
+/* leaf tucked into the textarea corner */
+.field-wrap { position: relative; }
+.field-wrap .leaf { position: absolute; right: 12px; bottom: 12px; width: 20px; height: 20px; color: var(--green-ink); opacity: .85; pointer-events: none; }
+
+/* extra hero scenery: tree + flower */
+.ch.tree { height: 132px; right: 1.5%; }
+.ch.rocks { right: 12%; }
+.ch.mush { right: 24%; }
+.ch.flower { height: 40px; left: 15%; }
+@media (max-width: 1040px) { .ch.tree { display: none; } .ch.rocks { right: 3%; } .ch.mush { right: 15%; } }
+@media (max-width: 860px) { .ch.flower { display: none; } }
+.rowline a.ext::after { content: "↗"; font-family: var(--mono); margin-left: 5px; }
+.rowline a.val { text-decoration: none; }
+.rowline a.val:hover { color: var(--green-ink); }
+.audio-wrap audio { height: 40px; }

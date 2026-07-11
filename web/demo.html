@@ -12,6 +12,15 @@
   <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <symbol id="i-doc" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 2.5h4.5l2.5 2.5v8h-7z"/><path d="M9 2.5v2.5h2.5"/><path d="M6 8.5h4M6 10.7h4"/></symbol>
+    <symbol id="i-user" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="6" r="2.4"/><path d="M3.8 13.2c0-2.3 1.9-3.6 4.2-3.6s4.2 1.3 4.2 3.6"/></symbol>
+    <symbol id="i-coin" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="5.3"/><path d="M8 5v6M6.4 6.4h3.2M6.4 9.4h3.2"/></symbol>
+    <symbol id="i-music" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.4" cy="11.6" r="1.7"/><circle cx="11.6" cy="10.2" r="1.7"/><path d="M7.1 11.6V4.6l6.2-1.5v7.1"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 12.8C2 8 5 3.5 12.8 3.2 13 11 8.2 14 3.2 12.8z"/><path d="M5 11c2.6-1.6 4.6-3.8 5.8-6.6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5 6.6 11.6 12.5 5"/></symbol>
+  </defs></svg>
+
   <nav class="nav">
     <div class="wrap">
       <a class="brand" href="/"><span class="mark"></span> GNOME</a>
@@ -30,9 +39,11 @@
       <h1 class="display" style="margin-top:18px;font-size:clamp(26px,4.4vw,40px)">Pay for one <span class="green-ink">API</span> call.</h1>
       <p class="lead" style="margin:14px auto 0">Type a sentence. The house wallet signs the x402 payment, settles it on <span id="chainName" class="green-ink">Base</span>, then Deepgram speaks it back.</p>
     </div>
+    <img class="ch tree px" src="/assets/tree.png" alt="" />
     <img class="ch gnome bob px" src="/assets/gnome.png" alt="Gnome mascot" />
     <img class="ch rocks px" src="/assets/rocks.png" alt="" />
     <img class="ch mush px" src="/assets/mushroom.png" alt="" />
+    <img class="ch flower px" src="/assets/flower.png" alt="" />
     <div class="ground"></div>
   </header>
 
@@ -41,12 +52,15 @@
       <!-- input -->
       <div class="pcard">
         <label class="lbl" for="text">What should the agent say?</label>
-        <textarea id="text" class="field" maxlength="300" placeholder="Type a sentence for the agent to speak.">Hello. I am an autonomous agent, and I just paid for this sentence on chain.</textarea>
+        <div class="field-wrap">
+          <textarea id="text" class="field" maxlength="300" placeholder="Type a sentence for the agent to speak.">Hello. I am an autonomous agent, and I just paid for this sentence on chain.</textarea>
+          <svg class="ic leaf ic-g"><use href="#i-leaf" /></svg>
+        </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
           <span class="muted" style="font-size:12.5px"><span id="count">0</span>/300 · <span id="price" class="mono">0</span> per call</span>
           <span id="mode" class="badge badge-live">on chain</span>
         </div>
-        <button id="run" class="btn btn-primary" style="width:100%;margin-top:18px">Pay and synthesize</button>
+        <button id="run" class="btn btn-primary sparkly" style="width:100%;margin-top:18px">Pay and synthesize</button>
 
         <div class="steps" id="steps">
           <div class="st" data-k="sign"><span class="b">1</span> Sign x402 authorization</div>
@@ -62,12 +76,15 @@
           Your paid audio and its on-chain receipt appear here.
         </div>
         <div id="result" class="hidden">
-          <h3 class="sub" style="color:var(--green-ink)">Payment settled</h3>
-          <audio id="audio" controls style="width:100%;margin:12px 0 16px"></audio>
-          <div class="row"><span class="muted">Transaction</span><a id="txLink" class="tx" href="#" target="_blank" rel="noopener">0</a></div>
-          <div class="row" style="margin-top:9px"><span class="muted">Payer</span><span id="payer" class="addr">0</span></div>
-          <div class="row" style="margin-top:9px"><span class="muted">Amount</span><span id="amt" class="amt">0</span></div>
-          <a id="download" class="btn" style="width:100%;margin-top:16px" download="gnome.mp3">Download MP3</a>
+          <div class="checkline" style="margin-bottom:16px">
+            <span class="check"><svg class="ic"><use href="#i-check" /></svg></span>
+            <h3 class="sub" style="margin:0;color:var(--green-ink)">Payment settled</h3>
+          </div>
+          <div class="audio-wrap" style="margin-bottom:14px"><audio id="audio" controls></audio></div>
+          <div class="rowline"><span class="iconbox"><svg class="ic"><use href="#i-doc" /></svg></span><span class="lab">Transaction</span><a id="txLink" class="val ext" href="#" target="_blank" rel="noopener">0</a></div>
+          <div class="rowline"><span class="iconbox"><svg class="ic"><use href="#i-user" /></svg></span><span class="lab">Payer</span><span id="payer" class="val">0</span></div>
+          <div class="rowline"><span class="iconbox"><svg class="ic"><use href="#i-coin" /></svg></span><span class="lab">Amount</span><span id="amt" class="val green">0</span></div>
+          <a id="download" class="btn" style="width:100%;margin-top:16px" download="gnome.mp3"><svg class="ic"><use href="#i-music" /></svg> Download MP3</a>
         </div>
         <div id="error" class="hidden" style="color:#b3261e;font-size:14px"></div>
       </div>
