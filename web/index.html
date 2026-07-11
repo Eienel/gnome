@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tab402 — Pay-per-call APIs for agents, settled on Robinhood Chain</title>
+  <meta name="description" content="An x402 payment rail that lets any agent pay for a premium API one call at a time, on-chain, from a balance it cannot overspend. EVM-native, settled on Robinhood Chain." />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="wrap">
+      <a class="brand" href="/"><span class="dot"></span> Tab402</a>
+      <div class="nav-links">
+        <a href="#how">How it works</a>
+        <a href="#build">Build</a>
+        <a href="/dashboard">Dashboard</a>
+        <a class="btn btn-primary" href="/demo">Try the demo →</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero wrap">
+    <span class="pill"><span class="dot"></span> Live on <span id="chainName">Robinhood Chain</span> · x402 · EVM-native</span>
+    <h1>Metered API payments<br />for <span class="grad">autonomous agents</span></h1>
+    <p class="sub">Any agent can pay for a premium API one call at a time — on-chain, from a balance it can't overspend. HTTP 402, settled as an EIP-3009 stablecoin transfer on Robinhood Chain.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="/demo">Run the live demo</a>
+      <a class="btn btn-ghost" href="#build">Wire up your agent</a>
+    </div>
+  </header>
+
+  <!-- Live stats -->
+  <section class="wrap" style="padding-top:8px">
+    <div class="stats" id="stats">
+      <div class="stat"><div class="v" id="s-calls">—</div><div class="l">Paid calls settled</div></div>
+      <div class="stat"><div class="v" id="s-vol">—</div><div class="l">Volume (<span id="s-sym">token</span>)</div></div>
+      <div class="stat"><div class="v" id="s-price">—</div><div class="l">Price per call</div></div>
+      <div class="stat"><div class="v" id="s-chain">Robinhood</div><div class="l">Settlement chain</div></div>
+    </div>
+  </section>
+
+  <!-- Problem -->
+  <section class="wrap">
+    <span class="eyebrow">The problem</span>
+    <h2 class="title">Agents hold crypto. APIs still want credit cards.</h2>
+    <p class="lead">An autonomous agent can't sign up for a card, and nothing stops it from running up an unbounded bill. Tab402 fixes both: pay-as-you-go access with a hard cap enforced by the payment itself. When the balance runs out, the calls stop. There is no overdraft.</p>
+  </section>
+
+  <!-- How it works -->
+  <section class="wrap" id="how">
+    <span class="eyebrow">How a paid call works</span>
+    <h2 class="title">402 → sign → settle → serve</h2>
+    <div class="flow">
+      <div class="step"><div class="n">01</div><h4>402 Payment Required</h4><p>The agent calls a paid endpoint and gets back the price and payment terms.</p></div>
+      <div class="step"><div class="n">02</div><h4>Sign authorization</h4><p>It signs an EIP-3009 <span class="mono">transferWithAuthorization</span> with its EVM key.</p></div>
+      <div class="step"><div class="n">03</div><h4>Settle on-chain</h4><p>The facilitator submits the transfer to Robinhood Chain and pays the gas.</p></div>
+      <div class="step"><div class="n">04</div><h4>Serve the result</h4><p>Only after settlement does the upstream API run and return its result.</p></div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="wrap">
+    <div class="grid grid-3">
+      <div class="card card-hover feature"><div class="ic">🔒</div><h3>Hard spend cap</h3><p>The balance is the ceiling. No subscriptions, no surprise invoices, no overdraft — enforced by the transfer itself.</p></div>
+      <div class="card card-hover feature"><div class="ic">⚡</div><h3>EVM-native x402</h3><p>Standard HTTP 402 + EIP-3009 authorizations. Works with any ERC-20 stablecoin and any EVM chain.</p></div>
+      <div class="card card-hover feature"><div class="ic">🏦</div><h3>Robinhood Chain</h3><p>Every call is a final settlement on Robinhood's EVM network. Click any payment through to the block explorer.</p></div>
+      <div class="card card-hover feature"><div class="ic">🧩</div><h3>Provider-agnostic</h3><p>The demo gates Deepgram TTS, but the rail sits in front of any HTTP API. The value is the rail, not the API.</p></div>
+      <div class="card card-hover feature"><div class="ic">🤖</div><h3>Drop-in for agents</h3><p>Wrap <span class="mono">fetch</span> once and every 402 is paid automatically. No wallet UX, no manual keys.</p></div>
+      <div class="card card-hover feature"><div class="ic">📊</div><h3>Live settlement feed</h3><p>Per-key usage, global volume, and a real-time on-chain feed in the developer dashboard.</p></div>
+    </div>
+  </section>
+
+  <!-- Build -->
+  <section class="wrap" id="build">
+    <span class="eyebrow">For developers</span>
+    <h2 class="title">Point an agent at the rail. It pays itself.</h2>
+    <p class="lead" style="margin-bottom:22px">Wrap fetch with a payer built from your agent's private key. Every HTTP 402 is signed and settled transparently.</p>
+    <div class="code">
+      <div class="bar"><i style="background:#ff5f56"></i><i style="background:#ffbd2e"></i><i style="background:#27c93f"></i><span class="mono muted" style="margin-left:8px;font-size:12px">agent.ts</span></div>
+<pre><span class="c">// pay-per-call, capped by the agent's on-chain balance</span>
+<span class="k">import</span> { createPayer, wrapFetchWithPayment } <span class="k">from</span> <span class="s">"tab402/client"</span>;
+
+<span class="k">const</span> payer = createPayer(process.env.<span class="k">AGENT_PRIVATE_KEY</span>);
+<span class="k">const</span> pay   = wrapFetchWithPayment(fetch, payer);
+
+<span class="c">// the 402 is signed &amp; settled on Robinhood Chain automatically</span>
+<span class="k">const</span> res = <span class="k">await</span> pay(<span class="s">"https://tab402.app/v1/speak"</span>, {
+  method: <span class="s">"POST"</span>,
+  headers: { <span class="s">"Content-Type"</span>: <span class="s">"application/json"</span> },
+  body: JSON.stringify({ text: <span class="s">"Hello, paid on-chain."</span> }),
+});
+<span class="k">const</span> audio = Buffer.from(<span class="k">await</span> res.arrayBuffer()); <span class="c">// your MP3</span></pre>
+    </div>
+    <div class="hero-cta" style="justify-content:flex-start;margin-top:24px">
+      <a class="btn btn-primary" href="/dashboard">Provision an agent key</a>
+      <a class="btn btn-ghost" href="/demo">See it pay live</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="brand"><span class="dot"></span> Tab402</div>
+      <div class="muted">EVM-native x402 payment rail · settled on <span id="footChain">Robinhood Chain</span> · Deepgram TTS reference integration</div>
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+  <script>
+    (async () => {
+      try {
+        const [cfg, stats] = await Promise.all([
+          fetch('/api/config').then(r => r.json()),
+          fetch('/api/stats').then(r => r.json()),
+        ]);
+        const dec = cfg.token.decimals;
+        const fmt = (v) => (Number(v) / 10 ** dec).toLocaleString(undefined, { maximumFractionDigits: 4 });
+        document.getElementById('chainName').textContent = cfg.chainName;
+        document.getElementById('footChain').textContent = cfg.chainName;
+        document.getElementById('s-calls').textContent = stats.totalCalls ?? 0;
+        document.getElementById('s-vol').textContent = fmt(stats.volumeBaseUnits || '0');
+        document.getElementById('s-sym').textContent = cfg.token.symbol;
+        document.getElementById('s-price').textContent = fmt(cfg.priceBaseUnits) + ' ' + cfg.token.symbol;
+        document.getElementById('s-chain').textContent = cfg.chainName.split(' ')[0];
+      } catch (e) { /* stats optional on the marketing page */ }
+    })();
+  </script>
+</body>
+</html>

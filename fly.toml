@@ -1,0 +1,23 @@
+app = "tab402"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PROXY_PORT = "4021"
+  PORT = "4022"
+  FACILITATOR_URL = "http://localhost:4022"
+
+[http_service]
+  internal_port = 4021
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1
