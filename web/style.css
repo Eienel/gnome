@@ -314,12 +314,11 @@ textarea.field { border-radius: var(--radius-sm); }
 .field-wrap { position: relative; }
 .field-wrap .leaf { position: absolute; right: 12px; bottom: 12px; width: 20px; height: 20px; color: var(--green-ink); opacity: .85; pointer-events: none; }
 
-/* extra hero scenery: tree + flower */
-.ch.tree { height: 132px; right: 1.5%; }
+/* extra hero scenery: flower */
 .ch.rocks { right: 12%; }
 .ch.mush { right: 24%; }
 .ch.flower { height: 40px; left: 15%; }
-@media (max-width: 1040px) { .ch.tree { display: none; } .ch.rocks { right: 3%; } .ch.mush { right: 15%; } }
+@media (max-width: 1040px) { .ch.rocks { right: 3%; } .ch.mush { right: 15%; } }
 @media (max-width: 860px) { .ch.flower { display: none; } }
 .rowline a.ext::after { content: "↗"; font-family: var(--mono); margin-left: 5px; }
 .rowline a.val { text-decoration: none; }
