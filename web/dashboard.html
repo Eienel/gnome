@@ -3,144 +3,140 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gnome — Developer dashboard</title>
-  <meta name="description" content="Provision an agent wallet, fund it, and watch real on-chain x402 settlements on Robinhood Chain." />
+  <title>Gnome. Developer dashboard.</title>
+  <meta name="description" content="Provision an agent wallet, fund it, and watch real on-chain x402 settlements." />
+  <meta name="theme-color" content="#00e676" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Crect x=%271%27 y=%271%27 width=%2714%27 height=%2714%27 fill=%27%2300e676%27 stroke=%27%230d0f0e%27 stroke-width=%272%27/%3E%3C/svg%3E" />
+  <link rel="preload" href="/fonts/silkscreen-400.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="/style.css" />
+  <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
   <nav class="nav">
     <div class="wrap">
-      <a class="brand" href="/"><span class="dot"></span> Gnome</a>
+      <a class="brand" href="/"><span class="mark"></span> GNOME</a>
       <div class="nav-links">
         <a href="/#how">How it works</a>
         <a href="/demo">Demo</a>
-        <a class="btn btn-ghost" href="/">Home</a>
+        <a class="btn" href="/">Home</a>
       </div>
     </div>
   </nav>
 
   <section class="wrap" style="padding-top:44px">
-    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:22px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;margin-bottom:24px">
       <div>
-        <span class="eyebrow">Developer dashboard</span>
-        <h2 class="title" style="margin:8px 0 4px">Agent keys &amp; on-chain usage</h2>
-        <p class="muted" style="margin:0">Rail on <span id="chainName" class="green">Robinhood Chain</span> · <span id="tokenSym" class="mono">token</span> · <span id="modeBadge" class="badge-live mono">on-chain</span></p>
+        <h1 class="display" style="font-size:clamp(24px,3.6vw,34px)">Developer dashboard</h1>
+        <p class="muted" style="margin:8px 0 0;font-size:14px">Rail on <span id="chainName" class="green-ink">Base</span> · <span id="tokenSym" class="mono">USDC</span> · <span id="modeBadge" class="badge badge-live">on chain</span></p>
       </div>
-      <a class="btn btn-primary" href="/demo">Open live demo →</a>
+      <a class="btn btn-primary" href="/demo">Open demo</a>
     </div>
 
-    <!-- Stats -->
-    <div class="stats" style="margin-bottom:22px">
-      <div class="stat"><div class="v" id="s-calls">—</div><div class="l">Paid calls</div></div>
-      <div class="stat"><div class="v" id="s-vol">—</div><div class="l">Volume (<span id="s-sym">tok</span>)</div></div>
-      <div class="stat"><div class="v" id="s-price">—</div><div class="l">Price / call</div></div>
-      <div class="stat"><div class="v mono" id="s-net">—</div><div class="l">Network</div></div>
+    <!-- stats -->
+    <div class="stats" style="margin-bottom:24px">
+      <div class="stat pcard"><div class="v" id="s-calls">0</div><div class="l">Paid calls</div></div>
+      <div class="stat pcard"><div class="v" id="s-vol">0</div><div class="l">Volume <span id="s-sym">USDC</span></div></div>
+      <div class="stat pcard"><div class="v" id="s-price">0</div><div class="l">Per call</div></div>
+      <div class="stat pcard"><div class="v mono" id="s-net" style="font-size:15px">base</div><div class="l">Network</div></div>
     </div>
 
-    <div class="grid grid-2" style="align-items:start">
-      <!-- Provision -->
-      <div class="card">
-        <h3 style="margin:0 0 6px;font-size:18px">Provision an agent wallet</h3>
-        <p class="muted" style="margin:0 0 16px;font-size:14px">Generates a fresh EVM keypair. The agent signs x402 authorizations with it; its token balance is the hard spend cap.</p>
+    <div class="grid g2" style="align-items:start;gap:22px">
+      <!-- provision -->
+      <div class="pcard">
+        <h3 class="sub">Provision an agent wallet</h3>
+        <p class="muted" style="margin:0 0 16px;font-size:14px">Generates a fresh EVM keypair. The agent signs x402 authorizations with it. Its token balance is the hard cap.</p>
         <button id="provision" class="btn btn-primary" style="width:100%">Generate agent key</button>
         <div id="keyOut" class="hidden" style="margin-top:16px">
           <div class="row" style="flex-direction:column;align-items:stretch;gap:6px">
-            <span class="muted" style="font-size:12px">Address</span>
-            <span id="pk-addr" class="addr" style="word-break:break-all"></span>
+            <span class="lbl" style="margin:0">Address</span><span id="pk-addr" class="addr" style="word-break:break-all"></span>
           </div>
           <div class="row" style="flex-direction:column;align-items:stretch;gap:6px;margin-top:8px">
-            <span class="muted" style="font-size:12px">Private key — store securely, shown once</span>
-            <span id="pk-key" class="addr" style="word-break:break-all;color:var(--amber)"></span>
+            <span class="lbl" style="margin:0">Private key, store now, shown once</span><span id="pk-key" class="addr" style="word-break:break-all;color:#b26a00"></span>
           </div>
           <div class="row" style="flex-direction:column;align-items:stretch;gap:6px;margin-top:8px">
-            <span class="muted" style="font-size:12px">API key</span>
-            <span id="pk-api" class="addr" style="word-break:break-all"></span>
+            <span class="lbl" style="margin:0">API key</span><span id="pk-api" class="addr" style="word-break:break-all"></span>
           </div>
           <div style="display:flex;gap:10px;margin-top:14px">
-            <button id="fund" class="btn btn-ghost" style="flex:1">Fund from treasury</button>
-            <button id="checkBal" class="btn btn-ghost" style="flex:1">Check balance</button>
+            <button id="fund" class="btn" style="flex:1">Fund from treasury</button>
+            <button id="checkBal" class="btn" style="flex:1">Check balance</button>
           </div>
           <div id="fundMsg" class="muted" style="font-size:13px;margin-top:10px"></div>
         </div>
       </div>
 
-      <!-- Usage lookup -->
-      <div class="card">
-        <h3 style="margin:0 0 6px;font-size:18px">Look up usage</h3>
+      <!-- lookup -->
+      <div class="pcard">
+        <h3 class="sub">Look up usage</h3>
         <p class="muted" style="margin:0 0 16px;font-size:14px">Spend and settlement history for any address on the rail.</p>
         <label class="lbl" for="lookupAddr">Address</label>
         <div style="display:flex;gap:10px">
-          <input id="lookupAddr" class="field" placeholder="0x…" />
+          <input id="lookupAddr" class="field" placeholder="0x address" />
           <button id="lookup" class="btn btn-primary">Search</button>
         </div>
         <div id="usageOut" class="hidden" style="margin-top:16px">
           <div style="display:flex;gap:14px;margin-bottom:12px">
-            <div class="stat" style="flex:1"><div class="v" id="u-count">0</div><div class="l">Calls</div></div>
-            <div class="stat" style="flex:1"><div class="v" id="u-spent">0</div><div class="l">Spent</div></div>
+            <div class="stat pcard" style="flex:1;box-shadow:var(--shadow-sm)"><div class="v" id="u-count">0</div><div class="l">Calls</div></div>
+            <div class="stat pcard" style="flex:1;box-shadow:var(--shadow-sm)"><div class="v" id="u-spent">0</div><div class="l">Spent</div></div>
           </div>
           <div id="usageFeed" class="feed"></div>
         </div>
       </div>
     </div>
 
-    <!-- Live feed -->
-    <section style="padding:36px 0 20px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-        <h3 style="margin:0;font-size:19px">Live settlement feed</h3>
-        <span class="pill"><span class="dot"></span> auto-refreshing</span>
+    <!-- feed -->
+    <section style="padding:40px 0 20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h2 class="title" style="margin:0;font-size:clamp(20px,3vw,28px)">Live settlement feed</h2>
+        <span class="chip"><span class="live"></span> auto-refresh</span>
       </div>
-      <div id="feed" class="feed"><div class="muted">Loading…</div></div>
+      <div id="feed" class="feed"><div class="muted">Loading</div></div>
     </section>
   </section>
 
-  <footer><div class="wrap"><div class="brand"><span class="dot"></span> Gnome</div><div class="muted">Every row is a real x402 settlement · click through to the explorer</div></div></footer>
+  <footer><div class="wrap"><a class="brand" href="/"><span class="mark"></span> GNOME</a><div class="muted">Every row is a real x402 settlement</div></div></footer>
 
   <script src="/app.js"></script>
   <script>
     const $ = (id) => document.getElementById(id);
-    let CFG, DEC = 6, SYM = "token";
-    let lastKey = null;
-
+    let CFG, DEC = 6, SYM = "USDC", lastKey = null;
     const money = (v) => GNOME.fmtUnits(v, DEC) + " " + SYM;
-    const rowHtml = (s) => `
-      <div class="row">
-        <span class="addr">${GNOME.short(s.payer)}</span>
-        <span class="amt">${money(s.amount)}</span>
-        <span class="muted" style="font-size:12px">${GNOME.ago(s.ts)}</span>
-        <a class="tx" href="${s.explorerUrl || "#"}" target="_blank" rel="noopener">${GNOME.short(s.transaction)} ↗</a>
-      </div>`;
+    const rowHtml = (s) =>
+      '<div class="row"><span class="addr">' + GNOME.short(s.payer) + '</span>' +
+      '<span class="amt">' + money(s.amount) + '</span>' +
+      '<span class="muted" style="font-size:12px">' + GNOME.ago(s.ts) + '</span>' +
+      '<a class="tx" href="' + (s.explorerUrl || "#") + '" target="_blank" rel="noopener">' + GNOME.short(s.transaction) + '</a></div>';
 
     async function loadStats() {
-      const st = await fetch("/api/stats").then(r => r.json());
+      const st = await fetch("/api/stats").then((r) => r.json());
       $("s-calls").textContent = st.totalCalls ?? 0;
       $("s-vol").textContent = GNOME.fmtUnits(st.volumeBaseUnits || "0", DEC);
       $("s-sym").textContent = SYM;
     }
     async function loadFeed() {
-      const f = await fetch("/api/feed").then(r => r.json());
+      const f = await fetch("/api/feed").then((r) => r.json());
       $("feed").innerHTML = f.settlements.length
         ? f.settlements.map(rowHtml).join("")
-        : '<div class="muted">No settlements yet — run the <a class="green" href="/demo">demo</a>.</div>';
+        : '<div class="muted">No settlements yet. Run the <a class="green-ink" href="/demo">demo</a>.</div>';
     }
 
     (async () => {
       CFG = await GNOME.getConfig();
       DEC = CFG.token.decimals; SYM = CFG.token.symbol;
       $("chainName").textContent = CFG.chainName;
-      $("tokenSym").textContent = `${CFG.token.symbol} · ${CFG.token.name}`;
+      $("tokenSym").textContent = CFG.token.symbol + " · " + CFG.token.name;
       $("s-price").textContent = money(CFG.priceBaseUnits);
       $("s-net").textContent = CFG.network;
       const sim = CFG.settlementMode === "simulate";
-      $("modeBadge").textContent = sim ? "simulated" : "on-chain";
-      $("modeBadge").className = (sim ? "badge-sim" : "badge-live") + " mono";
+      $("modeBadge").textContent = sim ? "simulated" : "on chain";
+      $("modeBadge").className = "badge " + (sim ? "badge-sim" : "badge-live");
       await loadStats(); await loadFeed();
       setInterval(() => { loadStats(); loadFeed(); }, 6000);
     })();
 
     $("provision").addEventListener("click", async () => {
-      const btn = $("provision"); btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Generating…';
+      const btn = $("provision"); btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Generating';
       try {
-        const k = await fetch("/api/provision", { method: "POST" }).then(r => r.json());
+        const k = await fetch("/api/provision", { method: "POST" }).then((r) => r.json());
         lastKey = k;
         $("pk-addr").textContent = k.address;
         $("pk-key").textContent = k.privateKey;
@@ -150,29 +146,29 @@
       finally { btn.disabled = false; btn.textContent = "Generate another key"; }
     });
 
-    $("fund")?.addEventListener("click", async () => {
+    $("fund").addEventListener("click", async () => {
       if (!lastKey) return;
-      $("fundMsg").textContent = "Submitting treasury transfer…";
+      $("fundMsg").textContent = "Submitting treasury transfer";
       try {
         const r = await fetch("/api/fund", {
           method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ address: lastKey.address }),
-        }).then(r => r.json());
+        }).then((r) => r.json());
         $("fundMsg").innerHTML = r.ok
-          ? `Funded ✓ <a class="green tx" target="_blank" href="${r.explorerUrl}">${GNOME.short(r.transaction)} ↗</a>`
-          : `<span style="color:var(--red)">${r.error}</span>`;
-      } catch (e) { $("fundMsg").innerHTML = '<span style="color:var(--red)">Fund failed</span>'; }
+          ? 'Funded. <a class="green-ink tx" target="_blank" href="' + r.explorerUrl + '">' + GNOME.short(r.transaction) + "</a>"
+          : '<span style="color:#b3261e">' + r.error + "</span>";
+      } catch (e) { $("fundMsg").innerHTML = '<span style="color:#b3261e">Fund failed</span>'; }
     });
 
-    $("checkBal")?.addEventListener("click", async () => {
+    $("checkBal").addEventListener("click", async () => {
       if (!lastKey) return;
-      $("fundMsg").textContent = "Reading on-chain balance…";
-      const r = await fetch(`/api/balance/${lastKey.address}`).then(r => r.json());
-      $("fundMsg").textContent = r.unavailable ? "Balance unavailable (token not configured)" : `Balance: ${money(r.balance)}`;
+      $("fundMsg").textContent = "Reading on-chain balance";
+      const r = await fetch("/api/balance/" + lastKey.address).then((r) => r.json());
+      $("fundMsg").textContent = r.unavailable ? "Balance unavailable (token not configured)" : "Balance: " + money(r.balance);
     });
 
     async function doLookup(addr) {
-      const u = await fetch(`/api/usage/${addr}`).then(r => r.json());
+      const u = await fetch("/api/usage/" + addr).then((r) => r.json());
       $("u-count").textContent = u.count;
       $("u-spent").textContent = GNOME.fmtUnits(u.spentBaseUnits || "0", DEC);
       $("usageFeed").innerHTML = u.settlements.length ? u.settlements.map(rowHtml).join("") : '<div class="muted">No calls for this address.</div>';

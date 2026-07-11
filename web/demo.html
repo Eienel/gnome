@@ -3,130 +3,150 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gnome — Live demo</title>
-  <meta name="description" content="Type a sentence, watch the house wallet pay for a Deepgram text-to-speech call on Robinhood Chain, and play the result." />
+  <title>Gnome. Live demo.</title>
+  <meta name="description" content="Type a sentence, watch the house wallet pay for a Deepgram text-to-speech call on chain, and play the result." />
+  <meta name="theme-color" content="#00e676" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Crect x=%271%27 y=%271%27 width=%2714%27 height=%2714%27 fill=%27%2300e676%27 stroke=%27%230d0f0e%27 stroke-width=%272%27/%3E%3C/svg%3E" />
+  <link rel="preload" href="/fonts/silkscreen-400.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="/style.css" />
+  <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
   <nav class="nav">
     <div class="wrap">
-      <a class="brand" href="/"><span class="dot"></span> Gnome</a>
+      <a class="brand" href="/"><span class="mark"></span> GNOME</a>
       <div class="nav-links">
         <a href="/#how">How it works</a>
         <a href="/dashboard">Dashboard</a>
-        <a class="btn btn-ghost" href="/">Home</a>
+        <a class="btn" href="/">Home</a>
       </div>
     </div>
   </nav>
 
-  <section class="wrap" style="padding-top:56px">
+  <section class="wrap" style="padding-top:52px">
     <div style="text-align:center;max-width:640px;margin:0 auto 34px">
-      <span class="pill"><span class="dot"></span> House-funded demo · no wallet needed</span>
-      <h2 class="title" style="margin-top:18px">Pay for one API call, live on-chain</h2>
-      <p class="lead" style="margin:0 auto">Type a sentence. The house wallet signs an x402 payment, settles it on <span id="chainName" class="green">Robinhood Chain</span>, then Deepgram synthesizes your audio. Watch every step.</p>
+      <span class="chip"><span class="live"></span> House-funded · no wallet needed</span>
+      <h1 class="display" style="margin-top:18px;font-size:clamp(26px,4.4vw,40px)">Pay for one API call.</h1>
+      <p class="lead" style="margin:14px auto 0">Type a sentence. The house wallet signs the x402 payment, settles it on <span id="chainName" class="green-ink">Base</span>, then Deepgram speaks it back.</p>
     </div>
 
-    <div class="grid grid-2" style="align-items:start">
-      <!-- Left: input -->
-      <div class="card">
+    <div class="grid g2" style="align-items:start;gap:22px">
+      <!-- input -->
+      <div class="pcard">
         <label class="lbl" for="text">What should the agent say?</label>
-        <textarea id="text" class="field" maxlength="300" placeholder="Hello. I am an autonomous agent, and I just paid for this sentence on-chain.">Hello. I am an autonomous agent, and I just paid for this sentence on-chain.</textarea>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
-          <span class="muted" style="font-size:12.5px"><span id="count">0</span>/300 · costs <span id="price" class="green mono">—</span> per call</span>
-          <span id="mode" class="badge-live mono">on-chain</span>
+        <textarea id="text" class="field" maxlength="300" placeholder="Type a sentence for the agent to speak.">Hello. I am an autonomous agent, and I just paid for this sentence on chain.</textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+          <span class="muted" style="font-size:12.5px"><span id="count">0</span>/300 · <span id="price" class="mono">0</span> per call</span>
+          <span id="mode" class="badge badge-live">on chain</span>
         </div>
-        <button id="run" class="btn btn-primary" style="width:100%;margin-top:18px">Pay &amp; synthesize</button>
+        <button id="run" class="btn btn-primary" style="width:100%;margin-top:18px">Pay and synthesize</button>
 
         <div class="steps" id="steps">
           <div class="st" data-k="sign"><span class="b">1</span> Sign x402 authorization</div>
-          <div class="st" data-k="settle"><span class="b">2</span> Settle payment on <span id="chainName2">Robinhood Chain</span></div>
+          <div class="st" data-k="settle"><span class="b">2</span> Settle on <span id="chainName2">Base</span></div>
           <div class="st" data-k="synth"><span class="b">3</span> Deepgram synthesizes audio</div>
-          <div class="st" data-k="done"><span class="b">✓</span> Delivered</div>
+          <div class="st" data-k="done"><span class="b">4</span> Delivered</div>
         </div>
       </div>
 
-      <!-- Right: result -->
-      <div class="card" id="resultCard">
-        <div id="idle" class="muted" style="text-align:center;padding:40px 10px">
-          <div style="font-size:38px;margin-bottom:10px">🔊</div>
-          Your paid audio and its on-chain receipt will appear here.
+      <!-- result -->
+      <div class="pcard">
+        <div id="idle" class="muted" style="text-align:center;padding:34px 10px">
+          Your paid audio and its on-chain receipt appear here.
         </div>
         <div id="result" class="hidden">
-          <div style="font-weight:700;font-size:17px;margin-bottom:14px">Payment settled ✓</div>
-          <audio id="audio" controls style="width:100%;margin-bottom:16px"></audio>
-          <div class="row"><span class="muted">Transaction</span><a id="txLink" class="tx" href="#" target="_blank" rel="noopener">—</a></div>
-          <div class="row" style="margin-top:8px"><span class="muted">Payer</span><span id="payer" class="addr">—</span></div>
-          <div class="row" style="margin-top:8px"><span class="muted">Amount</span><span id="amt" class="amt">—</span></div>
-          <a id="download" class="btn btn-ghost" style="width:100%;margin-top:16px" download="gnome.mp3">Download MP3</a>
+          <h3 class="sub" style="color:var(--green-ink)">Payment settled</h3>
+          <audio id="audio" controls style="width:100%;margin:12px 0 16px"></audio>
+          <div class="row"><span class="muted">Transaction</span><a id="txLink" class="tx" href="#" target="_blank" rel="noopener">0</a></div>
+          <div class="row" style="margin-top:9px"><span class="muted">Payer</span><span id="payer" class="addr">0</span></div>
+          <div class="row" style="margin-top:9px"><span class="muted">Amount</span><span id="amt" class="amt">0</span></div>
+          <a id="download" class="btn" style="width:100%;margin-top:16px" download="gnome.mp3">Download MP3</a>
         </div>
-        <div id="error" class="hidden" style="color:var(--red);font-size:14px"></div>
+        <div id="error" class="hidden" style="color:#b3261e;font-size:14px"></div>
       </div>
     </div>
   </section>
 
-  <footer><div class="wrap"><div class="brand"><span class="dot"></span> Gnome</div><div class="muted">Deepgram TTS · x402 · settled on <span id="footChain">Robinhood Chain</span></div></div></footer>
+  <footer style="margin-top:56px">
+    <div class="wrap">
+      <a class="brand" href="/"><span class="mark"></span> GNOME</a>
+      <div class="muted">Deepgram TTS · x402 · settled on <span id="footChain">Base</span></div>
+    </div>
+  </footer>
 
   <script src="/app.js"></script>
   <script>
     const $ = (id) => document.getElementById(id);
     let CFG;
-    const setStep = (k, s) => { const el = document.querySelector(`.st[data-k="${k}"]`); if (el) el.className = `st ${s}`; };
-    const resetSteps = () => ["sign","settle","synth","done"].forEach(k => setStep(k, ""));
+    const setStep = (k, s) => { const el = document.querySelector('.st[data-k="' + k + '"]'); if (el) el.className = "st " + s; };
+    const resetSteps = () => ["sign", "settle", "synth", "done"].forEach((k) => setStep(k, ""));
 
-    $("text").addEventListener("input", () => $("count").textContent = $("text").value.length);
+    $("text").addEventListener("input", () => ($("count").textContent = $("text").value.length));
     $("count").textContent = $("text").value.length;
 
     (async () => {
       CFG = await GNOME.getConfig();
       const dec = CFG.token.decimals;
-      const p = GNOME.fmtUnits(CFG.priceBaseUnits, dec) + " " + CFG.token.symbol;
-      $("price").textContent = p;
+      $("price").textContent = GNOME.fmtUnits(CFG.priceBaseUnits, dec) + " " + CFG.token.symbol;
       $("chainName").textContent = CFG.chainName;
       $("chainName2").textContent = CFG.chainName;
       $("footChain").textContent = CFG.chainName;
       const sim = CFG.settlementMode === "simulate";
       const m = $("mode");
-      m.textContent = sim ? "simulated" : "on-chain";
-      m.className = (sim ? "badge-sim" : "badge-live") + " mono";
+      m.textContent = sim ? "simulated" : "on chain";
+      m.className = "badge " + (sim ? "badge-sim" : "badge-live");
     })();
 
     $("run").addEventListener("click", async () => {
       const text = $("text").value.trim();
       if (!text) return;
-      $("idle").classList.add("hidden"); $("result").classList.add("hidden"); $("error").classList.add("hidden");
-      const btn = $("run"); btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Paying…';
-      resetSteps(); setStep("sign","active");
-      // Visual pacing for the two off-server-visible steps
-      setTimeout(() => { setStep("sign","done"); setStep("settle","active"); }, 500);
-      setTimeout(() => { setStep("settle","done"); setStep("synth","active"); }, 1100);
+      $("idle").classList.add("hidden");
+      $("result").classList.add("hidden");
+      $("error").classList.add("hidden");
+      const btn = $("run");
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spin"></span> Paying';
+      resetSteps();
+      setStep("sign", "active");
+      // Pacing for the two off-screen steps. Cleared on completion so a fast
+      // response never lets a late timer clobber the final state.
+      const t1 = setTimeout(() => { setStep("sign", "done"); setStep("settle", "active"); }, 500);
+      const t2 = setTimeout(() => { setStep("settle", "done"); setStep("synth", "active"); }, 1100);
+      const clearPacing = () => { clearTimeout(t1); clearTimeout(t2); };
       try {
         const res = await fetch("/api/demo/speak", {
-          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }),
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text }),
         });
         if (!res.ok) {
           const j = await res.json().catch(() => ({}));
-          throw new Error(j.error ? `${j.error}${j.detail ? " · " + j.detail : ""}` : `HTTP ${res.status}`);
+          throw new Error(j.error ? j.error + (j.detail ? " (" + j.detail + ")" : "") : "HTTP " + res.status);
         }
-        setStep("sign","done"); setStep("settle","done"); setStep("synth","done"); setStep("done","done");
+        clearPacing();
+        setStep("sign", "done"); setStep("settle", "done"); setStep("synth", "done"); setStep("done", "done");
         const receiptHdr = res.headers.get("X-PAYMENT-RESPONSE");
         const blob = await res.blob();
         const url = URL.createObjectURL(blob);
-        $("audio").src = url; $("download").href = url;
+        $("audio").src = url;
+        $("download").href = url;
         let receipt = {};
-        try { receipt = JSON.parse(atob(receiptHdr)); } catch {}
+        try { receipt = JSON.parse(atob(receiptHdr)); } catch (e) {}
         const dec = CFG.token.decimals;
-        $("txLink").textContent = receipt.transaction ? GNOME.short(receipt.transaction) : "—";
-        $("txLink").href = receipt.transaction && CFG.explorer ? `${CFG.explorer}/tx/${receipt.transaction}` : "#";
-        $("payer").textContent = receipt.payer ? GNOME.short(receipt.payer) : "—";
+        $("txLink").textContent = receipt.transaction ? GNOME.short(receipt.transaction) : "n/a";
+        $("txLink").href = receipt.transaction && CFG.explorer ? CFG.explorer + "/tx/" + receipt.transaction : "#";
+        $("payer").textContent = receipt.payer ? GNOME.short(receipt.payer) : "n/a";
         $("amt").textContent = GNOME.fmtUnits(CFG.priceBaseUnits, dec) + " " + CFG.token.symbol;
         $("result").classList.remove("hidden");
         $("audio").play().catch(() => {});
       } catch (e) {
+        clearPacing();
         $("error").textContent = "Payment failed: " + e.message;
         $("error").classList.remove("hidden");
         resetSteps();
       } finally {
-        btn.disabled = false; btn.textContent = "Pay & synthesize";
+        btn.disabled = false;
+        btn.textContent = "Pay and synthesize";
       }
     });
   </script>

@@ -17,3 +17,31 @@ window.GNOME = (() => {
   }
   return { short, ago, fmtUnits, getConfig };
 })();
+
+// Scroll reveal via IntersectionObserver (no scroll listeners; reduced-motion safe).
+(function () {
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function run() {
+    const els = document.querySelectorAll(".reveal");
+    if (reduce || !("IntersectionObserver" in window)) {
+      els.forEach((el) => el.classList.add("in"));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            const el = e.target;
+            const delay = Number(el.dataset.delay || 0);
+            setTimeout(() => el.classList.add("in"), delay);
+            io.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+    );
+    els.forEach((el) => io.observe(el));
+  }
+  if (document.readyState !== "loading") run();
+  else document.addEventListener("DOMContentLoaded", run);
+})();
