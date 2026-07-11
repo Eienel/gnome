@@ -116,7 +116,10 @@ app.get("/supported", (_req, res) => {
 
 app.get("/health", (_req, res) => res.json({ status: "ok", mode: cfg.settlementMode }));
 
-app.listen(cfg.port, () => {
-  console.log(`🚀 Facilitator on http://localhost:${cfg.port} (mode=${cfg.settlementMode})`);
+// Bind loopback only: the facilitator is internal (the proxy calls it over
+// localhost). This keeps it off the container's external interface so hosts
+// like Render route public traffic to the proxy, not here.
+app.listen(cfg.port, "127.0.0.1", () => {
+  console.log(`🚀 Facilitator on http://127.0.0.1:${cfg.port} (mode=${cfg.settlementMode})`);
   console.log(`   networks: ${cfg.networks.join(", ")}`);
 });
