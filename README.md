@@ -105,21 +105,27 @@ See `.env.example` for the full list.
 
 ## Deploy
 
-Deployed on **Fly.io** as a single container running the facilitator plus the proxy — see `Dockerfile` and `fly.toml`. The non-secret network config (Base Sepolia, USDC, price) is baked into `fly.toml [env]`; only secrets need setting. A persistent volume keeps the settlement ledger across deploys.
+Deployed on **Fly.io** as a single container running the facilitator plus the proxy (see `Dockerfile` and `fly.toml`). The non-secret network config (Base Sepolia, USDC, price) is baked into `fly.toml [env]`; only secrets need setting. A persistent volume keeps the settlement ledger across deploys.
+
+**One-time setup** (from a machine with [flyctl](https://fly.io/docs/flyctl/install/) installed and `fly auth login` done):
 
 ```bash
-fly launch --no-deploy          # first time: creates the app + volume
-fly volumes create gnome_data --size 1   # if not auto-created
+fly apps create gnome                     # or: fly launch --no-deploy --copy-config --name gnome
+fly volumes create gnome_data --size 1 --region iad
 fly secrets set \
-  FACILITATOR_PRIVATE_KEY=0x… \
-  TREASURY_PRIVATE_KEY=0x… \
-  DEMO_AGENT_PRIVATE_KEY=0x… \
-  PAYEE_ADDRESS=0x… \
-  DEEPGRAM_API_KEY=…
-fly deploy
+  FACILITATOR_PRIVATE_KEY=0x... \
+  TREASURY_PRIVATE_KEY=0x... \
+  DEMO_AGENT_PRIVATE_KEY=0x... \
+  PAYEE_ADDRESS=0x... \
+  DEEPGRAM_API_KEY=...
+fly deploy --remote-only
 ```
 
-**Going live on Robinhood Chain mainnet:** update the network vars in `fly.toml [env]` (`CAIP2_CHAIN_ID`, `NETWORKS`, `ROBINHOOD_CHAIN_ID`, `RPCURL_ROBINHOOD`, `ROBINHOOD_EXPLORER`, `ASSET_ADDRESS`) to the mainnet values, then `fly deploy`. No code changes required.
+Fund the keys before the demo works on-chain: the facilitator key needs Base Sepolia ETH for gas, and the treasury/demo key needs Base Sepolia USDC (see the faucet links above).
+
+**Continuous deploys via GitHub Actions:** `.github/workflows/fly-deploy.yml` runs `flyctl deploy` on every push once the app exists. Add a `FLY_API_TOKEN` repository secret (`flyctl tokens create deploy`) and pushes deploy automatically. Runtime secrets stay in Fly, never in the repo.
+
+**Going live on Robinhood Chain mainnet:** update the network vars in `fly.toml [env]` (`CAIP2_CHAIN_ID`, `NETWORKS`, `ROBINHOOD_CHAIN_ID`, `RPCURL_ROBINHOOD`, `ROBINHOOD_EXPLORER`, `ASSET_ADDRESS`) to the mainnet values, then deploy. No code changes required.
 
 `vercel.json` deploys the static marketing/dashboard pages (`web/`) as a preview; the full rail runs on Fly.
 
