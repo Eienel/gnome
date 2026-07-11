@@ -20,16 +20,23 @@
         <a href="/dashboard">Dashboard</a>
         <a class="btn" href="/">Home</a>
       </div>
+      <img class="nav-gnome px" src="/assets/gnome.png" alt="Gnome mascot" width="26" height="46" />
     </div>
   </nav>
 
-  <section class="wrap" style="padding-top:52px">
-    <div style="text-align:center;max-width:640px;margin:0 auto 34px">
+  <header class="hero scene" style="padding-top:40px;padding-bottom:80px">
+    <div class="stage wrap" style="text-align:center;max-width:660px">
       <span class="chip"><span class="live"></span> House-funded · no wallet needed</span>
-      <h1 class="display" style="margin-top:18px;font-size:clamp(26px,4.4vw,40px)">Pay for one API call.</h1>
+      <h1 class="display" style="margin-top:18px;font-size:clamp(26px,4.4vw,40px)">Pay for one <span class="green-ink">API</span> call.</h1>
       <p class="lead" style="margin:14px auto 0">Type a sentence. The house wallet signs the x402 payment, settles it on <span id="chainName" class="green-ink">Base</span>, then Deepgram speaks it back.</p>
     </div>
+    <img class="ch gnome bob px" src="/assets/gnome.png" alt="Gnome mascot" />
+    <img class="ch rocks px" src="/assets/rocks.png" alt="" />
+    <img class="ch mush px" src="/assets/mushroom.png" alt="" />
+    <div class="ground"></div>
+  </header>
 
+  <section class="wrap" style="padding-top:40px">
     <div class="grid g2" style="align-items:start;gap:22px">
       <!-- input -->
       <div class="pcard">
@@ -67,10 +74,21 @@
     </div>
   </section>
 
-  <footer style="margin-top:56px">
+  <footer class="foot-scene" style="margin-top:56px">
     <div class="wrap">
-      <a class="brand" href="/"><span class="mark"></span> GNOME</a>
-      <div class="muted">Deepgram TTS · x402 · settled on <span id="footChain">Base</span></div>
+      <div class="foot-row">
+        <img class="foot-gnome px" src="/assets/gnome.png" alt="" />
+        <div class="bubble">Simple payments.<br />Magical results.</div>
+        <img class="foot-fire px bob" src="/assets/campfire.png" alt="" style="margin:0 auto" />
+        <div class="social">
+          <a href="https://github.com/Eienel/gnome" target="_blank" rel="noopener" title="GitHub">GH</a>
+          <a href="/dashboard" title="Dashboard">DB</a>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-top:2px solid var(--ink);padding-top:18px">
+        <a class="brand" href="/"><span class="mark"></span> GNOME</a>
+        <div class="muted">Deepgram TTS · x402 · settled on <span id="footChain">Base</span></div>
+      </div>
     </div>
   </footer>
 

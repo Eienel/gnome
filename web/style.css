@@ -223,3 +223,46 @@ footer .muted { font-family: var(--pixel); font-size: 10px; letter-spacing: .04e
 
 .spin { width: 15px; height: 15px; border: 2px solid rgba(13,15,14,.25); border-top-color: var(--ink); border-radius: 50%; animation: sp .7s linear infinite; }
 @keyframes sp { to { transform: rotate(360deg); } }
+
+/* ---- Pixel-art scenery (real sprites on a CSS grass ground) --------------- */
+img.px { image-rendering: pixelated; image-rendering: crisp-edges; display: block; }
+
+/* grass ground strip: green band with a blocky pixel top edge */
+.ground { position: relative; height: 20px; width: 100%;
+  background: linear-gradient(#54b45a, #3c9542); border-top: 3px solid var(--ink); }
+.ground::before { content: ""; position: absolute; left: 0; right: 0; top: -9px; height: 9px;
+  background: repeating-linear-gradient(90deg, #54b45a 0 7px, transparent 7px 14px);
+  border-top: 3px solid var(--ink); }
+.ground::after { content: ""; position: absolute; left: 0; right: 0; top: 3px; height: 3px; background: #74d07a; opacity: .6; }
+
+/* hero scene: gnome + props standing on the ground, headline in the middle */
+.scene { position: relative; }
+.scene .ground { position: absolute; left: 0; bottom: 0; z-index: 0; }
+.scene .stage { position: relative; z-index: 2; }
+.ch { position: absolute; bottom: 14px; z-index: 1; pointer-events: none; }
+.ch.gnome { height: 168px; left: 2%; }
+.ch.rocks { height: 66px; right: 3%; }
+.ch.mush { height: 46px; right: 15%; }
+.ch.bob { animation: bob 3.4s ease-in-out infinite; }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@media (max-width: 860px) { .ch.gnome { height: 116px; } .ch.rocks, .ch.mush { display: none; } }
+@media (max-width: 560px) { .ch.gnome { display: none; } }
+
+/* tiny gnome tucked into the nav corner */
+.nav-gnome { height: 46px; margin-left: 4px; align-self: flex-end; }
+@media (max-width: 420px) { .nav-gnome { display: none; } }
+
+/* footer campfire scene */
+.foot-scene { position: relative; }
+.foot-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; padding-bottom: 22px; }
+.foot-fire { height: 92px; }
+.foot-gnome { height: 96px; }
+.bubble { position: relative; background: var(--paper); border: 2px solid var(--ink); box-shadow: var(--shadow-sm);
+  padding: 10px 14px; font-family: var(--pixel); font-size: 11px; line-height: 1.7; }
+.bubble::after { content: ""; position: absolute; left: 24px; bottom: -10px; width: 12px; height: 12px;
+  background: var(--paper); border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); transform: rotate(45deg); }
+.social { display: flex; gap: 10px; }
+.social a { width: 40px; height: 40px; display: grid; place-items: center; border: 2px solid var(--ink);
+  background: var(--paper); box-shadow: var(--shadow-sm); font-family: var(--pixel); font-size: 12px; transition: transform .12s, background .15s; }
+.social a:hover { background: var(--green); transform: translate(-1px,-1px); }
+@media (max-width: 720px) { .foot-fire, .foot-gnome { height: 72px; } .foot-row { flex-wrap: wrap; justify-content: center; } .bubble { display: none; } }

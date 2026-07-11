@@ -21,12 +21,13 @@
         <a href="/dashboard">Dashboard</a>
         <a class="btn btn-primary" href="/demo">Try demo</a>
       </div>
+      <img class="nav-gnome px" src="/assets/gnome.png" alt="Gnome mascot" width="26" height="46" />
     </div>
   </nav>
 
-  <!-- HERO (centered) -->
-  <header class="hero wrap">
-    <div class="hero-inner">
+  <!-- HERO (centered, gnome + props on a grass ground) -->
+  <header class="hero scene" style="padding-bottom:88px">
+    <div class="stage wrap hero-inner">
       <span class="chip"><span class="live"></span> Live on <span id="chainName">Base</span> · x402</span>
       <h1 class="display" style="margin-top:22px">Pay per call.<br /><span class="green-ink">On chain.</span></h1>
       <p class="lead">Agents pay for premium APIs one call at a time, from a balance they cannot overspend.</p>
@@ -35,6 +36,10 @@
         <a class="btn" href="#build">Wire an agent</a>
       </div>
     </div>
+    <img class="ch gnome bob px" src="/assets/gnome.png" alt="Gnome mascot" />
+    <img class="ch rocks px" src="/assets/rocks.png" alt="" />
+    <img class="ch mush px" src="/assets/mushroom.png" alt="" />
+    <div class="ground"></div>
   </header>
 
   <!-- STATS (metric strip) -->
@@ -145,10 +150,21 @@
     </div>
   </section>
 
-  <footer>
+  <footer class="foot-scene">
     <div class="wrap">
-      <a class="brand" href="/"><span class="mark"></span> GNOME</a>
-      <div class="muted">x402 rail · settled on <span id="footChain">Base</span> · Deepgram TTS reference</div>
+      <div class="foot-row">
+        <img class="foot-gnome px" src="/assets/gnome.png" alt="" />
+        <div class="bubble">Simple payments.<br />Magical results.</div>
+        <img class="foot-fire px bob" src="/assets/campfire.png" alt="" style="margin:0 auto" />
+        <div class="social">
+          <a href="https://github.com/Eienel/gnome" target="_blank" rel="noopener" title="GitHub">GH</a>
+          <a href="/demo" title="Demo">GO</a>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;border-top:2px solid var(--ink);padding-top:18px">
+        <a class="brand" href="/"><span class="mark"></span> GNOME</a>
+        <div class="muted">x402 rail · settled on <span id="footChain">Base</span> · Deepgram TTS reference</div>
+      </div>
     </div>
   </footer>
 
