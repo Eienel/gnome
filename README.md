@@ -105,6 +105,16 @@ See `.env.example` for the full list.
 
 ## Deploy
 
+### Render (easiest, no CLI)
+
+A `render.yaml` blueprint is included. In the [Render dashboard](https://dashboard.render.com/): **New > Blueprint**, connect this repo, and Render reads the blueprint. Fill the five secrets it prompts for (`FACILITATOR_PRIVATE_KEY`, `TREASURY_PRIVATE_KEY`, `DEMO_AGENT_PRIVATE_KEY`, `PAYEE_ADDRESS`, `DEEPGRAM_API_KEY`), then **Apply**. Pushes auto-deploy after that.
+
+The non-secret network config (Base Sepolia, USDC, price) is baked into `render.yaml`. Fund the keys (Base Sepolia ETH for the facilitator's gas, USDC for the treasury/demo wallet) for real settlement, or set `SETTLEMENT_MODE=simulate` to run the full flow with no funding.
+
+Free-plan notes: the service spins down when idle (cold start on the next visit) and has no persistent disk, so the ledger/live-feed resets on restart. Use a paid instance with a disk for persistence and always-on.
+
+### Fly.io (CLI)
+
 Deployed on **Fly.io** as a single container running the facilitator plus the proxy (see `Dockerfile` and `fly.toml`). The non-secret network config (Base Sepolia, USDC, price) is baked into `fly.toml [env]`; only secrets need setting. A persistent volume keeps the settlement ledger across deploys.
 
 **One-time setup** (from a machine with [flyctl](https://fly.io/docs/flyctl/install/) installed and `fly auth login` done):

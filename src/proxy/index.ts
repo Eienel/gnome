@@ -44,7 +44,9 @@ function req(key: string, fallback?: string): string {
 }
 
 const cfg: Env = {
-  port: parseInt(process.env.PROXY_PORT || "4021", 10),
+  // Public port. Hosts like Render/Heroku inject PORT; fall back to PROXY_PORT
+  // (local/Fly) then 4021.
+  port: parseInt(process.env.PORT || process.env.PROXY_PORT || "4021", 10),
   network: primaryNetwork(),
   payTo: getAddress(req("PAYEE_ADDRESS", "0x0000000000000000000000000000000000000000")),
   asset: getAddress(req("ASSET_ADDRESS", "0x0000000000000000000000000000000000000000")),

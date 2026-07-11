@@ -28,6 +28,8 @@ export function parseEnv(): FacilitatorEnv {
   const settlementMode = (process.env.SETTLEMENT_MODE || "onchain") === "simulate" ? "simulate" : "onchain";
   const networksRaw = process.env.NETWORKS || primaryNetwork();
   const networks = networksRaw.split(",").map(n => n.trim()).filter(Boolean);
-  const port = parseInt(process.env.PORT || "4022", 10);
+  // Facilitator is internal-only. Use its own port var so the public PORT (set
+  // by hosts like Render) is free for the proxy.
+  const port = parseInt(process.env.FACILITATOR_PORT || "4022", 10);
   return { port, networks, privateKey: requireKey(settlementMode), settlementMode };
 }

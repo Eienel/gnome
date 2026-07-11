@@ -1,0 +1,46 @@
+# Render blueprint. In the Render dashboard: New > Blueprint, connect this repo,
+# it reads this file. Fill the `sync: false` secrets in the UI, then Deploy.
+# Free plan: spins down when idle and has no persistent disk, so the settlement
+# ledger (live feed) resets on restart. Bump `plan` to `starter` and add a disk
+# for persistence + always-on.
+services:
+  - type: web
+    name: gnome
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      # --- network: real Base Sepolia USDC settlement (non-secret) ---
+      - key: SETTLEMENT_MODE
+        value: onchain
+      - key: CAIP2_CHAIN_ID
+        value: eip155:84532
+      - key: NETWORKS
+        value: eip155:84532
+      - key: RPCURL_BASE_SEPOLIA
+        value: https://sepolia.base.org
+      - key: ASSET_ADDRESS
+        value: "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+      - key: PRICE
+        value: $0.001
+      - key: DEEPGRAM_TTS_MODEL
+        value: aura-2-thalia-en
+      - key: FACILITATOR_PORT
+        value: "4022"
+      - key: FACILITATOR_URL
+        value: http://localhost:4022
+      - key: LEDGER_PATH
+        value: /tmp/ledger.jsonl
+      # --- secrets: set these in the Render dashboard (never committed) ---
+      - key: FACILITATOR_PRIVATE_KEY
+        sync: false
+      - key: TREASURY_PRIVATE_KEY
+        sync: false
+      - key: DEMO_AGENT_PRIVATE_KEY
+        sync: false
+      - key: PAYEE_ADDRESS
+        sync: false
+      - key: DEEPGRAM_API_KEY
+        sync: false

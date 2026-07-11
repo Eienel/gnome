@@ -6,7 +6,7 @@ primary_region = "iad"
 
 [env]
   PROXY_PORT = "4021"
-  PORT = "4022"
+  FACILITATOR_PORT = "4022"
   FACILITATOR_URL = "http://localhost:4022"
   # Base Sepolia testnet, real USDC settlement. Swap to Robinhood mainnet at go-live.
   SETTLEMENT_MODE = "onchain"
